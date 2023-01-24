@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BinaryTree {
@@ -33,17 +34,17 @@ public class BinaryTree {
             }
         }
     }
-    public void preOrder() {
-        System.out.println("Preorder: " + preOrder(root));
+    public ArrayList<BinaryNode> preOrder() {
+        return preOrder(root);
     }
-    public String preOrder(BinaryNode node) {
-        String value = "";
+    public ArrayList<BinaryNode> preOrder(BinaryNode node) {
+        ArrayList<BinaryNode> array = new ArrayList<>();
         if (node != null) {
-            value += node.getValue() + " ";
-            value += preOrder(node.getLeft());
-            value += preOrder(node.getRight());
+            array.add(node);
+            array.addAll(preOrder(node.getLeft()));
+            array.addAll(preOrder(node.getRight()));
         }
-        return value;
+        return array;
     }
     public void postOrder() {
         System.out.println("Postorder: " + postOrder(root));
