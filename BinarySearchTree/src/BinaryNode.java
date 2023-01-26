@@ -32,7 +32,8 @@ public class BinaryNode {
     }
     public String toString()
     {
-        return "Value:"+value; //+
+        return value + "";
+//        return "Value:"+value; //+
 //                ", Left:"+(leftNode==null?null:leftNode.getValue())+
 //                ", Right:"+(rightNode==null?null:rightNode.getValue());
     }
