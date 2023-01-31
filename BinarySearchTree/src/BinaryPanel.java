@@ -11,7 +11,7 @@ public class BinaryPanel extends JPanel {
 
     public BinaryPanel() {
         setLayout(null);
-        setSize(1600, 900);
+        setSize(1600, height);
         JTextField textField = new JTextField();
         textField.setBounds(0, 0, 500, 25);
 

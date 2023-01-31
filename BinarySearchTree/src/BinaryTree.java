@@ -19,6 +19,7 @@ public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
         if (root == null) {
             root = node;
             root.parent = new BinaryNode(-1);
+            root.parent.setLeft(root);
         } else {
             place(root, node);
         }
@@ -154,16 +155,32 @@ public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
             }
         }
         if (node.getLeft() == null && node.getRight() != null) { // degree 1 with right child
-            if (node.parent.getRight().equals(node)) {
-                node.parent.setRight(node.getRight());
-                node.getRight().parent = node.parent;
-                return;
+            BinaryNode sucNode = successor(node);
+            if (!node.getRight().equals(sucNode)) {
+                sucNode.parent.setLeft(sucNode.getRight());
+                sucNode.setRight(node.getRight());
             }
+
             if (node.parent.getLeft().equals(node)) {
-                node.parent.setLeft(node.getRight());
-                node.getRight().parent = node.parent;
-                return;
+                node.parent.leftNode = sucNode;
+            } else {
+                node.parent.rightNode = sucNode;
             }
+            sucNode.parent = node.parent;
+
+
+
+
+//            if (node.parent.getRight().equals(node)) {
+//                node.parent.setRight(node.getRight());
+//                node.getRight().parent = node.parent;
+//                return;
+//            }
+//            if (node.parent.getLeft().equals(node)) {
+//                node.parent.setLeft(node.getRight());
+//                node.getRight().parent = node.parent;
+//                return;
+//            }
         }
         if (node.getRight() != null && node.getLeft() != null) {
             if (node.getRight().getLeft() == null) {
