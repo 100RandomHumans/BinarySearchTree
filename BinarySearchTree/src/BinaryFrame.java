@@ -12,22 +12,7 @@ public class BinaryFrame extends JFrame {
 
         BinaryPanel binaryPanel = new BinaryPanel();
 
-        JTextField textField = new JTextField();
-        textField.setBounds(0,0,500,25);
-
-        JButton button = new JButton("→");
-        button.setBounds(499, 0, 60, 24);
-        button.addActionListener(e -> {
-            binaryPanel.stringSplitter(textField.getText());
-            System.out.println(textField.getText());
-            textField.setText("");
-        });
-
-        binaryTree = new BinaryTree();
-        add(textField);
-        add(button);
-        add(new BinaryPanel());
-
+        add(binaryPanel);
         setVisible(true);
     }
 }

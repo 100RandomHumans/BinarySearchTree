@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class BinaryTree {
+public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
     BinaryNode root;
 
     public BinaryTree(String a) {
@@ -18,6 +18,7 @@ public class BinaryTree {
     public void add(BinaryNode node) {
         if (root == null) {
             root = node;
+            root.parent = new BinaryNode(-1);
         } else {
             place(root, node);
         }
@@ -27,12 +28,14 @@ public class BinaryTree {
         if (parent.getValue() > child.getValue()) {
             if (parent.getLeft() == null) {
                 parent.setLeft(child);
+                child.parent = parent;
             } else {
                 place(parent.getLeft(), child);
             }
         } else {
             if (parent.getRight() == null) {
                 parent.setRight(child);
+                child.parent = parent;
             } else {
                 place(parent.getRight(), child);
             }
@@ -89,7 +92,6 @@ public class BinaryTree {
             if (a.get(i) != null) {
                 a.add(a.get(i).getLeft());
                 a.add(a.get(i).getRight());
-                System.out.println(a.get(i).getLeft() + " : " + a.get(i).getRight());
             }
         }
         return a;
@@ -125,5 +127,93 @@ public class BinaryTree {
             }
         }
     }
+    public void remove(int value) {
 
+        BinaryNode node = search(value, root);
+        System.out.println(node + " removed");
+        if (node.getLeft() == null && node.getRight() == null) { // degree 0
+            if (node.parent.getRight().equals(node)) {
+                node.parent.setRight(null);
+                return;
+            }
+            if (node.parent.getLeft().equals(node)) {
+                node.parent.setLeft(null);
+                return;
+            }
+        }
+        if (node.getLeft() != null && node.getRight() == null) { // degree 1 with left child
+            if (node.parent.getRight().equals(node)) {
+                node.parent.setRight(node.getLeft());
+                node.getLeft().parent = node.parent;
+                return;
+            }
+            if (node.parent.getLeft().equals(node)) {
+                node.parent.setLeft(node.getLeft());
+                node.getLeft().parent = node.parent;
+                return;
+            }
+        }
+        if (node.getLeft() == null && node.getRight() != null) { // degree 1 with right child
+            if (node.parent.getRight().equals(node)) {
+                node.parent.setRight(node.getRight());
+                node.getRight().parent = node.parent;
+                return;
+            }
+            if (node.parent.getLeft().equals(node)) {
+                node.parent.setLeft(node.getRight());
+                node.getRight().parent = node.parent;
+                return;
+            }
+        }
+        if (node.getRight() != null && node.getLeft() != null) {
+            if (node.getRight().getLeft() == null) {
+                node.getLeft().parent = node.getRight();
+                node.getRight().parent = node.parent;
+
+                if ((node).getRight().equals(node)) {
+                    node.parent.setRight(node.getRight());
+                } else {
+                    node.parent.setLeft(node.getRight());
+                }
+                return;
+            }
+            BinaryNode node1 = successor(node);
+            node1.parent.leftNode = node1.rightNode;
+            node1.rightNode = node.getRight();
+            node1.leftNode = node.getLeft();
+            if ((node).getRight().equals(node)) {
+                node.parent.setRight(node1);
+            } else {
+                node.parent.setLeft(node1);
+            }
+            return;
+
+
+
+        }
+
+
+
+    }
+    private BinaryNode successor(BinaryNode k) //
+    {
+        BinaryNode temp = k;
+        temp = temp.getRight();
+        while(temp.getLeft() != null)
+            temp = temp.getLeft();
+        return temp;
+    }
+
+    public BinaryNode search (int value, BinaryNode startNode) {
+        if (startNode == null) {
+            return null;
+        }
+        if (startNode.getValue() == value) {
+            return startNode;
+        } else if (value < startNode.getValue()) {
+            return search(value, startNode.getLeft());
+        } else {
+            return search(value, startNode.getRight());
+        }
+    }
 }

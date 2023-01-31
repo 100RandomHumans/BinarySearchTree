@@ -1,7 +1,10 @@
 public class BinaryNode {
     public BinaryNode leftNode;
     public BinaryNode rightNode;
+    public int x;
+    public int y;
     public int value;
+    public BinaryNode parent;
     public BinaryNode(int value) {
         this.value = value;
         leftNode = null;
