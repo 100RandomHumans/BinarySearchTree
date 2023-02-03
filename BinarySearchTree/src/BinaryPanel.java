@@ -18,7 +18,10 @@ public class BinaryPanel extends JPanel {
         JButton button = new JButton("→");
         button.setBounds(499, 0, 60, 24);
         button.addActionListener(e -> {
-            aa.add(textField.getText());
+            aa.add(0, textField.getText());
+            if (aa.size() > 10) {
+                aa.remove(10);
+            }
             repaint();
             stringSplitter(textField.getText());
             System.out.println(textField.getText());
@@ -38,7 +41,6 @@ public class BinaryPanel extends JPanel {
     public void stringSplitter(String enter) {
         String[] a = enter.split(" ");
         if (a[0].equalsIgnoreCase("print")) {
-            System.out.println("printed out");
             for (BinaryNode[] pain : binaryTree.calculateTree()) {
                 System.out.println(Arrays.toString(pain));
             }
@@ -63,7 +65,6 @@ public class BinaryPanel extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        System.out.println("Binary Panel paint called");
         g.drawString("add x - add tiles ", 0, 35);
         g.drawString("remove x - remove tiles", 0, 45);
         int yy = 60;
@@ -72,8 +73,6 @@ public class BinaryPanel extends JPanel {
             yy += 10;
         }
 
-        int startY = 50;
-        int startX = 800;
         ArrayList<BinaryNode[]> tree = binaryTree.calculateTree();
         int intervalY = 875 / tree.size();
         int intervalX;
@@ -101,14 +100,23 @@ public class BinaryPanel extends JPanel {
         for (BinaryNode node : list) {
             if (node != null) {
                 if (node.getLeft() != null) {
-                    g.drawLine(node.x - 2, node.y, node.leftNode.x -2, node.leftNode.y - 12);
+                    g.drawLine(node.x - 2, node.y, node.getLeft().x -2, node.getLeft().y - 12);
                 }
                 if (node.getRight() != null) {
-                    g.drawLine(node.x - 2, node.y, node.rightNode.x -2, node.rightNode.y - 12);
+                    g.drawLine(node.x - 2, node.y, node.getRight().x -2, node.getRight().y - 12);
                 }
 
             }
         }
+        for (BinaryNode node : list) {
+            if (node != null && node != binaryTree.root) {
+                if (node.parent != null) {
+                    g.setColor(Color.blue);
+                    g.drawLine(node.x + g.getFontMetrics().stringWidth(node.getValue() + ""), node.y - 12, node.parent.x + g.getFontMetrics().stringWidth(node.parent.getValue() + ""), node.parent.y);
+                }
+            }
+        }
+
 
     }
 }

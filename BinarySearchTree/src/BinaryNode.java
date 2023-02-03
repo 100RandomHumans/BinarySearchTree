@@ -1,8 +1,8 @@
 public class BinaryNode {
-    public BinaryNode leftNode;
-    public BinaryNode rightNode;
-    public int x;
-    public int y;
+    private BinaryNode leftNode;
+    private BinaryNode rightNode;
+    public int x = 0;
+    public int y = 0;
     public int value;
     public BinaryNode parent;
     public BinaryNode(int value) {
@@ -18,9 +18,15 @@ public class BinaryNode {
 
     public void setLeft(BinaryNode leftNode) {
         this.leftNode = leftNode;
+        if (leftNode != null) {
+            leftNode.parent = this;
+        }
     }
     public void setRight(BinaryNode rightNode){
         this.rightNode = rightNode;
+        if (rightNode != null) {
+            rightNode.parent = this;
+        }
     }
 
     public BinaryNode getLeft() {
