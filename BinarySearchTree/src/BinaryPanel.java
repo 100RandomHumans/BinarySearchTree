@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class BinaryPanel extends JPanel {
     public static int width = 1600;
     public static int height = 900;
-    BinaryTree binaryTree = new BinaryTree();
+    BinaryTree binaryTree;
     ArrayList<String> aa = new ArrayList<>();
 
     public BinaryPanel() {
@@ -27,13 +27,10 @@ public class BinaryPanel extends JPanel {
             System.out.println(textField.getText());
             textField.setText("");
         });
-        JButton repainted = new JButton("repaint");
-        repainted.setBounds(560, 0, 100, 24);
-        repainted.addActionListener(e -> repaint());
-        binaryTree = new BinaryTree("7 27 11 3 14 12 26 41 19 35 4 50");
+
+        binaryTree = new BinaryTree();
         add(textField);
         add(button);
-        add(repainted);
     }
 
 
@@ -72,51 +69,42 @@ public class BinaryPanel extends JPanel {
             g.drawString(test, 0, yy);
             yy += 10;
         }
+        if (binaryTree.root!= null) {
+            ArrayList<BinaryNode[]> tree = binaryTree.calculateTree();
+            int intervalY = 875 / tree.size();
+            int intervalX;
+            int count;
+            int totalY = 50;
+            for (BinaryNode[] holder : tree) {
+                count = holder.length + 1;
+                intervalX = width / count;
+                int totalX = 0;
 
-        ArrayList<BinaryNode[]> tree = binaryTree.calculateTree();
-        int intervalY = 875 / tree.size();
-        int intervalX;
-        int count = 0;
-        int totalY = 50;
-        for (BinaryNode[] holder : tree) {
-            count = holder.length + 1;
-            intervalX = width / count;
-            int totalX = 0;
+                for (BinaryNode node : holder) {
+                    totalX += intervalX;
+                    if (node != null) {
 
-            for (BinaryNode node : holder) {
-                totalX += intervalX;
+                        g.drawString(node.getValue() + "", totalX, totalY);
+                        g.drawRect(totalX - 2, totalY - 12, g.getFontMetrics().stringWidth(node.getValue() + "") + 4, 12);
+                        node.x = totalX;
+                        node.y = totalY;
+                    }
+                }
+                totalY += intervalY;
+
+            }
+            ArrayList<BinaryNode> list = binaryTree.levelOrder();
+            for (BinaryNode node : list) {
                 if (node != null) {
+                    if (node.getLeft() != null) {
+                        g.drawLine(node.x - 2, node.y, node.getLeft().x - 2, node.getLeft().y - 12);
+                    }
+                    if (node.getRight() != null) {
+                        g.drawLine(node.x - 2, node.y, node.getRight().x - 2, node.getRight().y - 12);
+                    }
 
-                    g.drawString(node.getValue() + "", totalX, totalY);
-                    g.drawRect(totalX - 2, totalY - 12, g.getFontMetrics().stringWidth(node.getValue() + "") + 4, 12);
-                    node.x = totalX;
-                    node.y = totalY;
-                }
-            }
-            totalY += intervalY;
-
-        }
-        ArrayList<BinaryNode> list = binaryTree.levelOrder();
-        for (BinaryNode node : list) {
-            if (node != null) {
-                if (node.getLeft() != null) {
-                    g.drawLine(node.x - 2, node.y, node.getLeft().x -2, node.getLeft().y - 12);
-                }
-                if (node.getRight() != null) {
-                    g.drawLine(node.x - 2, node.y, node.getRight().x -2, node.getRight().y - 12);
-                }
-
-            }
-        }
-        for (BinaryNode node : list) {
-            if (node != null && node != binaryTree.root) {
-                if (node.parent != null) {
-                    g.setColor(Color.blue);
-                    g.drawLine(node.x + g.getFontMetrics().stringWidth(node.getValue() + ""), node.y - 12, node.parent.x + g.getFontMetrics().stringWidth(node.parent.getValue() + ""), node.parent.y);
                 }
             }
         }
-
-
     }
 }

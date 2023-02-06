@@ -20,6 +20,7 @@ public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
             root = node;
             root.parent = new BinaryNode(-1);
             root.parent.setLeft(root);
+            root.parent.setRight(new BinaryNode(-2));
         } else {
             place(root, node);
         }
@@ -43,48 +44,48 @@ public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
         }
     }
 
-    public ArrayList<BinaryNode> preOrder() {
-        return preOrder(root);
-    }
+//    public ArrayList<BinaryNode> preOrder() {
+//        return preOrder(root);
+//    }
+//
+//    public ArrayList<BinaryNode> preOrder(BinaryNode node) {
+//        ArrayList<BinaryNode> array = new ArrayList<>();
+//        if (node != null) {
+//            array.add(node);
+//            array.addAll(preOrder(node.getLeft()));
+//            array.addAll(preOrder(node.getRight()));
+//        }
+//        return array;
+//    }
 
-    public ArrayList<BinaryNode> preOrder(BinaryNode node) {
-        ArrayList<BinaryNode> array = new ArrayList<>();
-        if (node != null) {
-            array.add(node);
-            array.addAll(preOrder(node.getLeft()));
-            array.addAll(preOrder(node.getRight()));
-        }
-        return array;
-    }
+//    public ArrayList<BinaryNode> postOrder() {
+//        return postOrder(root);
+//    }
+//
+//    public ArrayList<BinaryNode> postOrder(BinaryNode node) {
+//        if (node == null)
+//            return new ArrayList<BinaryNode>();
+//        ArrayList<BinaryNode> aa = new ArrayList<>();
+//        aa.addAll(postOrder(node.getLeft()));
+//        aa.addAll(postOrder(node.getRight()));
+//        aa.add(node);
+//        return aa;
+//    }
 
-    public ArrayList<BinaryNode> postOrder() {
-        return postOrder(root);
-    }
-
-    public ArrayList<BinaryNode> postOrder(BinaryNode node) {
-        if (node == null)
-            return new ArrayList<BinaryNode>();
-        ArrayList<BinaryNode> aa = new ArrayList<>();
-        aa.addAll(postOrder(node.getLeft()));
-        aa.addAll(postOrder(node.getRight()));
-        aa.add(node);
-        return aa;
-    }
-
-    public ArrayList<BinaryNode> inOrder() {
-        return inOrder(root);
-    }
-
-    public ArrayList<BinaryNode> inOrder(BinaryNode node) {
-        if (node == null) {
-            return new ArrayList<>();
-        }
-        ArrayList<BinaryNode> holder = new ArrayList<>();
-        holder.addAll(inOrder(node.getLeft()));
-        holder.add(node);
-        holder.addAll(inOrder(node.getRight()));
-        return holder;
-    }
+//    public ArrayList<BinaryNode> inOrder() {
+//        return inOrder(root);
+//    }
+//
+//    public ArrayList<BinaryNode> inOrder(BinaryNode node) {
+//        if (node == null) {
+//            return new ArrayList<>();
+//        }
+//        ArrayList<BinaryNode> holder = new ArrayList<>();
+//        holder.addAll(inOrder(node.getLeft()));
+//        holder.add(node);
+//        holder.addAll(inOrder(node.getRight()));
+//        return holder;
+//    }
 
     public ArrayList<BinaryNode> levelOrder() {
         ArrayList<BinaryNode> a = new ArrayList<>();
@@ -111,7 +112,7 @@ public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
                 }
             }
             if (!flip) {
-                tree.remove(tree.size() -1 );
+                tree.remove(tree.size() - 1);
                 return tree;
             }
             tree.add(new BinaryNode[tree.get(tree.size() - 1).length * 2]);
@@ -128,75 +129,43 @@ public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
             }
         }
     }
+
     public void remove(int value) {
-        boolean isRoot = root.equals(search(value, root));
         BinaryNode node = search(value, root);
         System.out.println(node + " removed");
         if (node.getLeft() == null && node.getRight() == null) { // degree 0
             if (node.parent.getRight().equals(node)) {
                 node.parent.setRight(null);
-                return;
-            }
-            if (node.parent.getLeft().equals(node)) {
+            } else {
                 node.parent.setLeft(null);
-                return;
             }
+            if (node == root)
+                root = null;
+            return;
         }
         if (node.getLeft() != null && node.getRight() == null) { // degree 1 with left child
             if (node.parent.getRight().equals(node)) {
                 node.parent.setRight(node.getLeft());
-                node.getLeft().parent = node.parent;
-                return;
-            }
-            if (node.parent.getLeft().equals(node)) {
-                node.parent.setLeft(node.getLeft());
-                node.getLeft().parent = node.parent;
-                return;
-            }
-        }
-        if (node.getLeft() == null && node.getRight() != null) { // degree 1 with right child
-
-
-
-
-
-
-
-
-            BinaryNode sucNode = successor(node);
-            if (!node.getRight().equals(sucNode)) {
-                sucNode.parent.setLeft(sucNode.getRight());
-                sucNode.setRight(node.getRight());
-            }
-
-            if (node.parent.getLeft().equals(node)) {
-                node.parent.setLeft(sucNode);
             } else {
-                node.parent.setRight(sucNode);
+                node.parent.setLeft(node.getLeft());
             }
-            sucNode.parent = node.parent;
-
-            if (node.parent.getRight().equals(node)) {
-                node.parent.setRight(node.getRight());
-                node.getRight().parent = node.parent;
-                return;
-            }
-            if (node.parent.getLeft().equals(node)) {
-                node.parent.setLeft(node.getRight());
-                node.getRight().parent = node.parent;
-                return;
-            }
+            node.getLeft().parent = node.parent;
+            if (node == root)
+                root = node.getLeft();
+            return;
         }
-        if (node.getRight() != null && node.getLeft() != null) {
+        if (node.getRight() != null) {
             if (node.getRight().getLeft() == null) {
-                node.getLeft().parent = node.getRight();
-                node.getRight().parent = node.parent;
+                node = node.getRight();
+                node = node.parent;
                 node.getRight().setLeft(node.getLeft());
                 if (node.parent.getRight().equals(node)) {
                     node.parent.setRight(node.getRight());
                 } else {
                     node.parent.setLeft(node.getRight());
                 }
+                if (node == root)
+                    root = node.getRight();
                 return;
             }
 
@@ -211,24 +180,24 @@ public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
             } else {
                 node.parent.setLeft(sucNode);
             }
-
-
-
+            if (node == root)
+                root = sucNode;
+            return;
         }
-
-
-
+        if (node == root)
+            root = new BinaryNode(231823);
     }
+
     private BinaryNode successor(BinaryNode k) //
     {
         BinaryNode temp = k;
         temp = temp.getRight();
-        while(temp.getLeft() != null)
+        while (temp.getLeft() != null)
             temp = temp.getLeft();
         return temp;
     }
 
-    public BinaryNode search (int value, BinaryNode startNode) {
+    public BinaryNode search(int value, BinaryNode startNode) {
         if (startNode == null) {
             return null;
         }
@@ -240,7 +209,5 @@ public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
             return search(value, startNode.getRight());
         }
     }
-    public void replaceRoot(BinaryNode a) {
-        root = a;
-    }
+
 }
