@@ -134,13 +134,15 @@ public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
         BinaryNode node = search(value, root);
         System.out.println(node + " removed");
         if (node.getLeft() == null && node.getRight() == null) { // degree 0
-            if (node.parent.getRight().equals(node)) {
+            if (node == root) {
+                root = null;
+            return;
+        }
+            if (node.parent.getRight() != null && node.parent.getRight().equals(node)) {
                 node.parent.setRight(null);
             } else {
                 node.parent.setLeft(null);
             }
-            if (node == root)
-                root = null;
             return;
         }
         if (node.getLeft() != null && node.getRight() == null) { // degree 1 with left child
