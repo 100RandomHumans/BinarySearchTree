@@ -209,5 +209,4 @@ public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
             return search(value, startNode.getRight());
         }
     }
-
 }
