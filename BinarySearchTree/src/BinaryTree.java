@@ -130,64 +130,76 @@ public class BinaryTree { // FIX ROOT REPLACEMENT THING :D
         }
     }
 
-    public void remove(int value) {
-        BinaryNode node = search(value, root);
-        System.out.println(node + " removed");
-        if (node.getLeft() == null && node.getRight() == null) { // degree 0
-            if (node == root) {
-                root = null;
-            return;
-        }
-            if (node.parent.getRight() != null && node.parent.getRight().equals(node)) {
-                node.parent.setRight(null);
-            } else {
-                node.parent.setLeft(null);
-            }
-            return;
-        }
-        if (node.getLeft() != null && node.getRight() == null) { // degree 1 with left child
-            if (node.parent.getRight().equals(node)) {
-                node.parent.setRight(node.getLeft());
-            } else {
-                node.parent.setLeft(node.getLeft());
-            }
-            node.getLeft().parent = node.parent;
-            if (node == root)
-                root = node.getLeft();
-            return;
-        }
-        if (node.getRight() != null) {
-            if (node.getRight().getLeft() == null) {
-                node = node.getRight();
-                node = node.parent;
-                node.getRight().setLeft(node.getLeft());
-                if (node.parent.getRight().equals(node)) {
-                    node.parent.setRight(node.getRight());
+    public void remove(int i) {
+        BinaryNode node = search(i, root);
+        if (node.equals(root)) {
+            if (node.getRight() != null) {
+                BinaryNode holder = node.getRight();
+                if (holder.getLeft() != null) {
+                    while (holder.getLeft() != null) {
+                        holder = holder.getLeft();
+                    }
+                    holder.parent.setLeft(holder.getRight());
+                    root = holder;
+                    holder.setLeft(node.getLeft());
+                    holder.setRight(node.getRight());
+                    node.parent.setRight(holder);
                 } else {
-                    node.parent.setLeft(node.getRight());
+                    holder.parent.setRight(holder.getRight());
+                    root = holder;
+                    holder.setLeft(node.getLeft());
+                    holder.setRight(node.getRight());
+
                 }
-                if (node == root)
-                    root = node.getRight();
-                return;
-            }
-
-            BinaryNode sucNode = successor(node);
-
-            sucNode.parent.setLeft(sucNode.getRight());
-            sucNode.setRight(node.getRight());
-            sucNode.setLeft(node.getLeft());
-            sucNode.parent = node.parent;
-            if (node.parent.getRight().equals(node)) {
-                node.parent.setRight(sucNode);
+            } else if (node.getLeft() != null) {
+                root = node.getLeft();
             } else {
-                node.parent.setLeft(sucNode);
+                root = null;
             }
-            if (node == root)
-                root = sucNode;
-            return;
+        } else {
+            if (node.getRight() != null) {
+                BinaryNode holder = node.getRight();
+                if (holder.getLeft() != null) {
+                    while (holder.getLeft() != null) {
+                        holder = holder.getLeft();
+                    }
+                    holder.parent.setLeft(holder.getRight());
+
+                    if (node.parent.getRight().equals(node)) {
+                        node.parent.setRight(holder);
+                    } else {
+                        node.parent.setLeft(holder);
+                    }
+                    holder.setLeft(node.getLeft());
+                    holder.setRight(node.getRight());
+                } else {
+                    if (node.parent.getRight().equals(node)) {
+                        node.parent.setRight(holder);
+                    } else {
+                        node.parent.setLeft(holder);
+                    }
+                    holder.setLeft(node.getLeft());
+                }
+            } else if (node.getLeft() != null) {
+                if (node.parent.getRight().equals(node)) {
+                    node.parent.setRight(node.getLeft());
+                } else {
+                    node.parent.setLeft(node.getLeft());
+                }
+            } else {
+                if (node.parent.getRight().equals(node)) {
+                    node.parent.setRight(null);
+                } else
+                    node.parent.setLeft(null);
+            }
+
+
+
+
+
+
         }
-        if (node == root)
-            root = new BinaryNode(231823);
+
     }
 
     private BinaryNode successor(BinaryNode k) //

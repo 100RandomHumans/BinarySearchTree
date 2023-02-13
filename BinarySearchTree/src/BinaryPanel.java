@@ -28,7 +28,7 @@ public class BinaryPanel extends JPanel {
             textField.setText("");
         });
 
-        binaryTree = new BinaryTree();
+        binaryTree = new BinaryTree("7 27 11 3 14 12 26 41 19 35 4 50");
         add(textField);
         add(button);
     }
@@ -105,6 +105,13 @@ public class BinaryPanel extends JPanel {
 
                 }
             }
+            for (BinaryNode node : list) {
+                if (node != null) {
+                    g.setColor(Color.blue);
+                    g.drawLine(node.x + g.getFontMetrics().stringWidth(node.getValue() + ""), node.y - 12, node.parent.x + g.getFontMetrics().stringWidth(node.parent.getValue() + ""),node.parent.y);
+                }
+            }
+
         }
     }
 }
